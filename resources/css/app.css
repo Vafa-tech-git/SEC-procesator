@@ -1,3 +1,26 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    /* Hide scrollbar for Chrome, Safari and Opera */
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    .scrollbar-hide {
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+}
+
+@keyframes flash-glow {
+    0% { border-color: rgba(59, 130, 246, 0.5); box-shadow: 0 0 0px rgba(59, 130, 246, 0); }
+    50% { border-color: rgba(59, 130, 246, 1); box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+    100% { border-color: rgb(30, 41, 59); box-shadow: 0 0 0px rgba(59, 130, 246, 0); }
+}
+
+.animate-flash {
+    animation: flash-glow 3s ease-in-out infinite;
+}

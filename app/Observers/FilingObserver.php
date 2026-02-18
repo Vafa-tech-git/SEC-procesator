@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Filing;
 use App\Services\AiProcessor;
+use App\Jobs\EnrichFilingWithFinancials;
 
 class FilingObserver
 {
@@ -17,6 +18,8 @@ class FilingObserver
     {
       \Log::info("Observer triggered for: " .$filing->title);
       $this->processor->analyze($filing);
+
+      EnrichFilingWithFinancials::dispatch($filing);
     }
 
     /**

@@ -41,12 +41,14 @@ Your task is to analyze the text provided below, which is an excerpt from a corp
     * **Negative:** Missed estimates, lowered guidance, legal probes, declining margins, or significant new risks.
     * **Neutral:** Routine disclosures, mixed results (e.g., revenue up but earnings down), or maintaining status quo without significant surprises.
 4.  **Output Format:** Return **ONLY** a raw JSON object. Do not include markdown formatting (like ```json), distinct preambles, or explanations.
+5. **Classify the document:** Indentify if the filings belongs to one of these: 'Earnings', 'Insider trading', 'Ownership', 'Corporate events' or 'Legal'. If it doesn`t fit, return null.
 
 **JSON Schema:**
 {
   "summary": "String",
-  "sentiment": "String" // One of: "Positive", "Negative", "Neutral"
-}
+  "sentiment": "String" // One of: "Positive", "Negative", "Neutral",
+  "category": "String or null"
+  }
 
 **Text to Analyze:**
 $text
@@ -98,6 +100,7 @@ EOD;
         $filing->update([
             'summary' => strip_tags($data['summary']),
             'sentiment' => $data['sentiment'] ?? 'Neutral',
+            'display_category' => $data['category'] ?? null,
         ]);
       }
       } else{

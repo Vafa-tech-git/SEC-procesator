@@ -46,4 +46,8 @@ return [
         'key' => env('OLLAMA_KEY'),
     ],
 
+    'finnhub' => [
+        'key' => env('FINNHUB_API_KEY'),
+    ],
+
 ];

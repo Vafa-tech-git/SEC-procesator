@@ -1,72 +1,99 @@
-# Procesator: AI-Driven SEC insights dashboard
+# 🏦 Procesator - Professional SEC Insights Dashboard
 
-Procesator is a high-performance, automated intelligence platform that monitors, cleans, and analyzes SEC (U.S. Securities and Exchange Commission) filings in real-time. By combining a resilient 3-tier data fetching engine with local LLM-based sentiment analysis, it transforms raw legal documents into actionable financial insights.
+**Procesator** is a high-performance, AI-driven financial analysis platform that transforms raw SEC EDGAR filings into actionable investment intelligence. It combines real-time data ingestion, local LLM processing, and professional financial metrics into a sleek, modern interface.
 
-## 🚀 Key features
+---
 
-*   **Resilient 3-Tier data fetching**: 
-    *   **Tier 1**: Structured JSON/Atom API for maximum speed.
-    *   **Tier 2**: HTML Scraping (DomCrawler) as a primary fallback.
-    *   **Tier 3**: Headless Browser (Browsershot/Puppeteer) to bypass strict bot protection.
-*   **AI sentiment analysis**: Automated summarization and sentiment classification (Positive/Negative/Neutral) using local LLMs (Ollama/Llama3) with a seamless Cloud fallback.
-*   **Real-time dashboard**: Interactive UI built with Vue.js and Inertia.js, featuring a 60-second "Heartbeat" countdown and instant data synchronization.
-*   **Market analytics**: Dynamic visual breakdown of market sentiment using interactive Chart.js components.
-*   **Enterprise security**: Implements custom Content Security Policy (CSP), X-Frame-Options, Rate Limiting, and Mass Assignment protection.
-*   **Professional architecture**: Adheres to SOLID principles, utilizing Service Layers, Dependency Injection, and Model Observers for a clean, decoupled backend.
+## 🚀 Key Features
 
-## 🛠 Tech stack
+### 🧠 AI-Powered Intelligence
+- **Automated Summarization:** Instantly grasp the core message of complex filings analysis.
+- **Sentiment Classification:** Real-time market mood tracking (Positive/Negative/Neutral).
+- **Smart Categorization:** Filings are automatically sorted into intuitive groups like Earnings, Insider Trading, or Legal.
 
-*   **Backend**: Laravel 12 (PHP 8.3)
-*   **Frontend**: Vue.js 3, Inertia.js, Tailwind CSS
-*   **Database**: MySQL
-*   **AI Engine**: Ollama
-*   **Automation**: Laravel Scheduler & Artisan Commands
-*   **Infrastructure**: Docker (Laravel Sail)
+### 📊 Professional Financial Analysis
+- **Deep-Dive Metrics:** Real-time enrichment with 8 critical indicators: P/E Ratio, Profit Margin, ROE, Debt-to-Equity, and more.
+- **Earnings Surprise Tracking:** Interactive charts comparing Actual vs. Estimated EPS history.
+- **Master-Detail Interface:** Seamless transition from global feed to specific company deep-dives.
 
-## 📦 Installation & Setup
+### 🔍 Advanced Discovery & Personalization
+- **Persistent Watchlist:** Follow your favorite tickers and filter the feed to stay focused on your portfolio.
+- **Smart Search Engine:** Industrial-grade autocomplete with keyboard navigation (Arrows/Enter) and support for both Tickers and Names.
+- **Real-Time Polling:** The dashboard scans for new filings every 60 seconds without requiring page refreshes.
 
-### 1. Clone & Environment
+---
+
+## 🛠 Tech Stack
+
+- **Backend:** Laravel 12 (Sail / Docker)
+- **Frontend:** Vue.js 3 (Composition API) & Inertia.js
+- **Styling:** Tailwind CSS (Glassmorphism design)
+- **AI Engine:** Ollama
+- **Data APIs:** SEC EDGAR (RSS), Finnhub API
+- **Visualization:** Chart.js
+
+---
+
+## ⚙️ Installation & Setup
+
+### 1. Requirements
+- Docker & Laravel Sail
+- Ollama (running locally or use an cloud model)
+- Finnhub API Key
+
+### 2. Environment Configuration
+Clone the project and set up your `.env`:
 ```bash
-git clone https://github.com/yourusername/procesator.git
-cd procesator
 cp .env.example .env
 ```
+Ensure you configure:
+- `FINNHUB_API_KEY`
+- `OLLAMA_KEY`
+- `OLLAMA_HOST=http://172.17.0.1:11434` (for Docker-to-Host communication)
 
-### 2. Start infrastructure (Docker)
-Ensure you have Docker and Docker Compose installed.
+### 3. Launching the App
 ```bash
+# Start containers
 ./vendor/bin/sail up -d
+
+# Install dependencies & migrate
 ./vendor/bin/sail composer install
-./vendor/bin/sail npm install --force
+./vendor/bin/sail npm install
+./vendor/bin/sail php artisan migrate
+
+# Start the frontend
+npm run dev
 ```
 
-### 3. Database & assets
+### ⚙️ 4. Automation & Background Tasks
+
+#### Manual Scan
+To trigger a data fetch immediately:
 ```bash
-./vendor/bin/sail artisan migrate
-./vendor/bin/sail npm run build
+./vendor/bin/sail php artisan news:fetch
 ```
 
-### 4. AI configuration
-Ensure **Ollama** is running on your host machine and listening to Docker:
+#### Full Automation
+To keep the dashboard updated automatically in the background, run these in separate terminal windows:
+
 ```bash
-export OLLAMA_HOST=0.0.0.0
-ollama serve
-```
-Update your `.env` with the correct model name (e.g., `llama3`).
+# Start the background scheduler (Runs news:fetch every minute)
+./vendor/bin/sail php artisan schedule:work
 
-### 5. Start the Engine
-To start the real-time background scanner:
-```bash
-./vendor/bin/sail artisan schedule:work
+# Start the queue worker (Processes AI analysis & financial enrichment)
+./vendor/bin/sail php artisan queue:work
 ```
 
-## 🏗 System Architecture
+---
 
-The project follows a decoupled service-based architecture:
-*   **`SecFetcher`**: Orchestrates the multi-tier retrieval of SEC documents.
-*   **`AiProcessor`**: Handles HTML sanitization and LLM communication.
-*   **`FilingObserver`**: Decouples the fetcher from the processor, ensuring that every new filing is analyzed the moment it hits the database.
-*   **`FilingController`**: Serves as the high-performance bridge between data models and the reactive UI.
+## 🏛 Architecture Highlights
+
+- **Clean Layering:** Strict separation between Ingestion (Services), Transformation (Resources), and Delivery (Controllers).
+- **Async Pipeline:** Heavy AI and API tasks are handled by background Jobs to ensure zero UI lag.
+- **Security First:** Implemented API Rate Limiting, strict input sanitization, and route protection via Middleware.
+- **Performance:** Optimized Eloquent queries and debounced frontend search for minimal server load.
+
+---
 
 ## 📄 License
 This project is open-sourced under the [MIT license](https://opensource.org/licenses/MIT).
